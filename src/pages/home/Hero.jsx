@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import bg1 from "../../pictures/bg1.jpg";
-import bg2 from "../../pictures/bg2.jpg";
+import bg2 from "../../pictures/bg2.avif";
 import bg3 from "../../pictures/bg3.jpg";
 import px33 from "../../pictures/px33.webp";
 import px32 from "../../pictures/px32.webp";
@@ -69,14 +69,14 @@ const slideProducts = [
     discount: 30,
   },
   {
-    img: bg1,
+    img: bg2,
     sale: "20%",
     title: "FUTURE FOOTBALL",
     subtitle: "BOOTS",
     discount: 20,
   },
   {
-    img: bg1,
+    img: bg3,
     sale: "30%",
     title: "FUTURE FOOTBALL",
     subtitle: "BOOTS",
@@ -306,7 +306,7 @@ const HomeHeroSection = () => {
             {slideProducts.map((product, index) => (
               <div
                 key={index}
-                className="relative flex items-center justify-center h-[600px] bg-zinc-950 opacity-70"
+                className="relative flex items-center justify-center h-[600px] bg-zinc-950 opacity-90"
               >
                 <div className="absolute w-full h-full  z-10"></div>
 
