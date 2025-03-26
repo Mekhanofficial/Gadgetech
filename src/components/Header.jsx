@@ -111,7 +111,7 @@ export default function HeaderPage() {
   };
 
   return (
-    <header className="bg-zinc-950 text-white w-full top-0 z-50">
+    <header className="bg-blue-900 text-white w-full top-0 z-50">
       {/* Top Header */}
       <div className="hidden md:flex justify-between items-center px-4 py-2 mx-auto max-w-7xl">
         <div className="flex items-center gap-5">
