@@ -384,7 +384,7 @@ export default function HeaderPage() {
           <Link to="/" className="text-white hover:text-red-400">
             HOME
           </Link>
-          <Link to="/shopping-page" className="text-white hover:text-red-400">
+          <Link to="/shop" className="text-white hover:text-red-400">
             SHOP
           </Link>
           <Link to="/about-us" className="text-white hover:text-red-400">
