@@ -412,7 +412,7 @@ export default function HeaderPage() {
               HOME
             </Link>
             <Link
-              to="/shopping-page"
+              to="/Shop"
               className="text-white hover:text-red-400"
               onClick={toggleMobileMenu}
             >
