@@ -42,23 +42,26 @@ const GadgetShop = ({
   const [sortOption, setSortOption] = useState("featured");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Parse URL parameters
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const search = params.get("search");
-    if (search) {
-      setSearchQuery(search);
-      handleSearch(search);
-    }
 
-    const categoryPath = location.pathname.split("/shop/")[1];
-    if (categoryPath) {
-      const categoryData = findCategoryByPath(categoryPath);
-      if (categoryData) {
-        handleFilter(categoryData.products, categoryData.name, categoryPath);
-      }
-    }
-  }, [location]);
+  // Parse URL parameters
+ useEffect(() => {
+   const params = new URLSearchParams(location.search);
+   const search = params.get("search");
+   const categoryPath = location.pathname.split("/shop/")[1];
+
+   if (search) {
+     setSearchQuery(search);
+     handleSearch(search);
+   } else if (categoryPath) {
+     const categoryData = findCategoryByPath(categoryPath);
+     if (categoryData) {
+       handleFilter(categoryData.products, categoryData.name, categoryPath);
+     }
+   } else if (location.pathname === "/shop") {
+     // Reset to all gadgets when navigating to /shop without search or category
+     handleFilter(allGadgets, "All Gadgets");
+   }
+ }, [location]);
 
   // Get current products
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -93,61 +96,65 @@ const GadgetShop = ({
     setCurrentPage(1);
   };
 
-  const applyAllFilters = (products) => {
-    let filtered = [...products];
+const applyAllFilters = (products) => {
+  let filtered = [...products];
 
-    // Apply search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (product) =>
-          product.name.toLowerCase().includes(query) ||
-          product.brand.toLowerCase().includes(query) ||
-          product.description.toLowerCase().includes(query)
+  // Apply search filter safely
+  if (searchQuery && searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter((product) => {
+      const name = product.name || "";
+      const brand = product.brand || "";
+      const description = product.description || "";
+
+      return (
+        name.toLowerCase().includes(query) ||
+        brand.toLowerCase().includes(query) ||
+        description.toLowerCase().includes(query)
       );
-    }
+    });
+  }
+  // Apply price filter
+  filtered = filtered.filter(
+    (product) =>
+      product.price >= priceRange[0] && product.price <= priceRange[1]
+  );
 
-    // Apply price filter
-    filtered = filtered.filter(
-      (product) =>
-        product.price >= priceRange[0] && product.price <= priceRange[1]
+  // Apply brand filter
+  if (brandFilter.length > 0) {
+    filtered = filtered.filter((product) =>
+      brandFilter.includes(product.brand)
     );
+  }
 
-    // Apply brand filter
-    if (brandFilter.length > 0) {
-      filtered = filtered.filter((product) =>
-        brandFilter.includes(product.brand)
+  // Apply rating filter
+  if (ratingFilter > 0) {
+    filtered = filtered.filter((product) => product.rating >= ratingFilter);
+  }
+
+  // Apply sorting
+  switch (sortOption) {
+    case "price-low":
+      filtered.sort((a, b) => a.price - b.price);
+      break;
+    case "price-high":
+      filtered.sort((a, b) => b.price - a.price);
+      break;
+    case "rating":
+      filtered.sort((a, b) => b.rating - a.rating);
+      break;
+    case "newest":
+      filtered.sort(
+        (a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)
       );
-    }
+      break;
+    default:
+      // Featured (default sorting)
+      break;
+  }
 
-    // Apply rating filter
-    if (ratingFilter > 0) {
-      filtered = filtered.filter((product) => product.rating >= ratingFilter);
-    }
-
-    // Apply sorting
-    switch (sortOption) {
-      case "price-low":
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case "price-high":
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case "rating":
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      case "newest":
-        filtered.sort(
-          (a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)
-        );
-        break;
-      default:
-        // Featured (default sorting)
-        break;
-    }
-
-    return filtered;
-  };
+  return filtered;
+};
 
   const clearFilters = () => {
     setFilteredProducts(allGadgets);
@@ -174,12 +181,12 @@ const GadgetShop = ({
     setCurrentPage(1);
   };
 
-  const updateFilteredProducts = () => {
-    const currentFilter = findCurrentFilter(activeFilter);
-    const productsToFilter = currentFilter?.products || allGadgets;
-    const filtered = applyAllFilters(productsToFilter);
-    setFilteredProducts(filtered);
-  };
+const updateFilteredProducts = () => {
+  const currentFilter = findCurrentFilter(activeFilter);
+  const productsToFilter = currentFilter?.products || allGadgets;
+  const filtered = applyAllFilters(productsToFilter);
+  setFilteredProducts(filtered);
+};
 
   const findCurrentFilter = (filterName) => {
     for (const [category, items] of Object.entries(categories)) {
@@ -213,76 +220,292 @@ const GadgetShop = ({
     return null;
   };
 
-  const handleSearch = (query = searchQuery) => {
-    if (query.trim()) {
-      const filtered = allGadgets.filter(
-        (product) =>
-          product.name.toLowerCase().includes(query.toLowerCase()) ||
-          product.brand.toLowerCase().includes(query.toLowerCase()) ||
-          product.description.toLowerCase().includes(query.toLowerCase())
+
+const handleSearch = (query = searchQuery) => {
+  setSearchQuery(query);
+  if (query && query.trim()) {
+    const queryLower = query.toLowerCase();
+    const filtered = allGadgets.filter((product) => {
+      // Safely check each property before calling toLowerCase()
+      const name = product.name || "";
+      const brand = product.brand || "";
+      const description = product.description || "";
+
+      return (
+        name.toLowerCase().includes(queryLower) ||
+        brand.toLowerCase().includes(queryLower) ||
+        description.toLowerCase().includes(queryLower)
       );
-      setFilteredProducts(filtered);
-      setActiveFilter(`Search: "${query}"`);
-      setCurrentPage(1);
-    } else {
-      updateFilteredProducts();
-    }
-  };
+    });
+    setFilteredProducts(filtered);
+    setActiveFilter(`Search: "${query}"`);
+    setCurrentPage(1);
+  } else {
+    // Reset to current filter when search is empty
+    const currentFilter = findCurrentFilter(activeFilter);
+    const productsToFilter = currentFilter?.products || allGadgets;
+    const filtered = applyAllFilters(productsToFilter);
+    setFilteredProducts(filtered);
+    setActiveFilter(currentFilter?.name || "All Gadgets");
+  }
+};
 
   const categories = {
-    "Shop by Category": {
-      "All Gadgets": {
-        products: allGadgets,
-        name: "All Gadgets",
-        path: "",
-      },
-      Smartphones: {
-        products: smartphones,
-        name: "Smartphones",
-        path: "smartphones",
-        subcategories: {
-          Android: {
-            products: smartphones.filter((p) => p.os === "Android"),
-            name: "Android Phones",
-            path: "android",
-          },
-          iOS: {
-            products: smartphones.filter((p) => p.os === "iOS"),
-            name: "iOS Phones",
-            path: "ios",
-          },
-          "5G Phones": {
-            products: smartphones.filter((p) => p.features.includes("5G")),
-            name: "5G Phones",
-            path: "5g-phones",
-          },
+  "Shop by Category": {
+    "All Gadgets": {
+      products: allGadgets,
+      name: "All Gadgets",
+      path: "",
+    },
+    Smartphones: {
+      products: smartphones,
+      name: "Smartphones",
+      path: "smartphones",
+      subcategories: {
+        Android: {
+          products: smartphones.filter((p) => p.os === "Android"),
+          name: "Android Phones",
+          path: "android",
+        },
+        iOS: {
+          products: smartphones.filter((p) => p.os === "iOS"),
+          name: "iOS Phones",
+          path: "ios",
+        },
+        "5G Phones": {
+          products: smartphones.filter((p) => p.features.includes("5G")),
+          name: "5G Phones",
+          path: "5g-phones",
+        },
+        Foldable: {
+          products: smartphones.filter((p) => p.features.includes("Foldable")),
+          name: "Foldable Phones",
+          path: "foldable",
+        },
+        Budget: {
+          products: smartphones.filter((p) => p.price < 300),
+          name: "Budget Phones",
+          path: "budget",
         },
       },
-      // ... other categories with similar structure
     },
-    Collections: {
-      "Trending Now": {
-        products: trendingNow,
-        name: "Trending Now",
-        path: "trending",
-      },
-      "Best Sellers": {
-        products: bestSellers,
-        name: "Best Sellers",
-        path: "bestsellers",
-      },
-      "New Releases": {
-        products: newReleases,
-        name: "New Releases",
-        path: "new-releases",
-      },
-      "Deals & Offers": {
-        products: deals,
-        name: "Deals & Offers",
-        path: "deals",
+    Laptops: {
+      products: laptops,
+      name: "Laptops",
+      path: "laptops",
+      subcategories: {
+        Gaming: {
+          products: laptops.filter((p) => p.category === "Gaming"),
+          name: "Gaming Laptops",
+          path: "gaming",
+        },
+        Ultrabooks: {
+          products: laptops.filter((p) => p.category === "Ultrabook"),
+          name: "Ultrabooks",
+          path: "ultrabooks",
+        },
+        Business: {
+          products: laptops.filter((p) => p.category === "Business"),
+          name: "Business Laptops",
+          path: "business",
+        },
+        Convertibles: {
+          products: laptops.filter((p) => p.features.includes("2-in-1")),
+          name: "2-in-1 Convertibles",
+          path: "convertibles",
+        },
       },
     },
-  };
+    Tablets: {
+      products: tablets,
+      name: "Tablets",
+      path: "tablets",
+      subcategories: {
+        iPad: {
+          products: tablets.filter((p) => p.brand === "Apple"),
+          name: "iPad",
+          path: "ipad",
+        },
+        Android: {
+          products: tablets.filter((p) => p.os === "Android"),
+          name: "Android Tablets",
+          path: "android",
+        },
+        Kids: {
+          products: tablets.filter((p) => p.category === "Kids"),
+          name: "Kids Tablets",
+          path: "kids",
+        },
+      },
+    },
+    Smartwatches: {
+      products: smartwatches,
+      name: "Smartwatches",
+      path: "smartwatches",
+      subcategories: {
+        Fitness: {
+          products: smartwatches.filter((p) => p.category === "Fitness"),
+          name: "Fitness Trackers",
+          path: "fitness",
+        },
+        Luxury: {
+          products: smartwatches.filter((p) => p.price > 500),
+          name: "Luxury Smartwatches",
+          path: "luxury",
+        },
+        Outdoor: {
+          products: smartwatches.filter((p) => p.features.includes("Rugged")),
+          name: "Outdoor Smartwatches",
+          path: "outdoor",
+        },
+      },
+    },
+    Headphones: {
+      products: headphones,
+      name: "Headphones",
+      path: "headphones",
+      subcategories: {
+        Wireless: {
+          products: headphones.filter((p) => p.type === "Wireless"),
+          name: "Wireless Earbuds",
+          path: "wireless",
+        },
+        NoiseCancelling: {
+          products: headphones.filter((p) => p.features.includes("Noise Cancelling")),
+          name: "Noise Cancelling",
+          path: "noise-cancelling",
+        },
+        Gaming: {
+          products: headphones.filter((p) => p.category === "Gaming"),
+          name: "Gaming Headsets",
+          path: "gaming",
+        },
+      },
+    },
+    Cameras: {
+      products: cameras,
+      name: "Cameras",
+      path: "cameras",
+      subcategories: {
+        DSLR: {
+          products: cameras.filter((p) => p.type === "DSLR"),
+          name: "DSLR",
+          path: "dslr",
+        },
+        Mirrorless: {
+          products: cameras.filter((p) => p.type === "Mirrorless"),
+          name: "Mirrorless",
+          path: "mirrorless",
+        },
+        Action: {
+          products: cameras.filter((p) => p.type === "Action"),
+          name: "Action Cameras",
+          path: "action",
+        },
+      },
+    },
+    Gaming: {
+      products: gaming,
+      name: "Gaming",
+      path: "gaming",
+      subcategories: {
+        Consoles: {
+          products: gaming.filter((p) => p.category === "Console"),
+          name: "Gaming Consoles",
+          path: "consoles",
+        },
+        Accessories: {
+          products: gaming.filter((p) => p.category === "Accessory"),
+          name: "Gaming Accessories",
+          path: "accessories",
+        },
+        VR: {
+          products: gaming.filter((p) => p.category === "VR"),
+          name: "VR Headsets",
+          path: "vr",
+        },
+      },
+    },
+    Accessories: {
+      products: accessories,
+      name: "Accessories",
+      path: "accessories",
+      subcategories: {
+        Cases: {
+          products: accessories.filter((p) => p.type === "Case"),
+          name: "Phone Cases",
+          path: "cases",
+        },
+        Chargers: {
+          products: accessories.filter((p) => p.type === "Charger"),
+          name: "Chargers & Cables",
+          path: "chargers",
+        },
+        PowerBanks: {
+          products: accessories.filter((p) => p.type === "Power Bank"),
+          name: "Power Banks",
+          path: "power-banks",
+        },
+      },
+    },
+    Audio: {
+      products: [...headphones, ...accessories.filter(a => a.category === "Audio")],
+      name: "Audio",
+      path: "audio",
+      subcategories: {
+        Speakers: {
+          products: accessories.filter(a => a.type === "Speaker"),
+          name: "Bluetooth Speakers",
+          path: "bluetooth",
+        },
+        Soundbars: {
+          products: accessories.filter(a => a.type === "Soundbar"),
+          name: "Soundbars",
+          path: "soundbars",
+        },
+      },
+    },
+    "Smart Home": {
+      products: accessories.filter(a => a.category === "Smart Home"),
+      name: "Smart Home",
+      path: "smart-home",
+      subcategories: {
+        Lights: {
+          products: accessories.filter(a => a.type === "Smart Light"),
+          name: "Smart Lights",
+          path: "lights",
+        },
+        Security: {
+          products: accessories.filter(a => a.type === "Security"),
+          name: "Smart Security",
+          path: "security",
+        },
+      },
+    },
+  },
+  Collections: {
+    "Trending Now": {
+      products: trendingNow,
+      name: "Trending Now",
+      path: "trending",
+    },
+    "Best Sellers": {
+      products: bestSellers,
+      name: "Best Sellers",
+      path: "bestsellers",
+    },
+    "New Releases": {
+      products: newReleases,
+      name: "New Releases",
+      path: "new-releases",
+    },
+    "Deals & Offers": {
+      products: deals,
+      name: "Deals & Offers",
+      path: "deals",
+    },
+  },
+  }
 
   const brands = [
     "Apple",
@@ -369,7 +592,7 @@ const GadgetShop = ({
   }, [brandFilter, ratingFilter, sortOption, searchQuery]);
 
   return (
-    <div className="flex flex-col mt-20 md:flex-row min-h-screen bg-gray-50">
+    <div className="flex flex-col mt-48 md:flex-row min-h-screen bg-gray-50">
       {/* Sidebar */}
       <div className="w-full md:w-72 lg:w-80 bg-white p-5 border-r border-gray-100 shadow-sm">
         <div className="mb-6">
@@ -410,38 +633,6 @@ const GadgetShop = ({
           </button>
         </div>
 
-        {/* Search */}
-        <div className="mb-6 bg-gray-50 p-3 rounded-lg border border-gray-100">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-            />
-            <button
-              onClick={() => handleSearch()}
-              className="absolute right-2 top-2 text-gray-500 hover:text-blue-600"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
 
         {/* Price Filter */}
         <div className="mb-6 bg-gray-50 p-3 rounded-lg border border-gray-100">

@@ -19,6 +19,9 @@ const HeaderPage = ({
   wishlist = [],
   removeFromCart,
   updateCartItemQuantity,
+  addToCart,
+  toggleWishlist,
+  isInWishlist,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -168,11 +171,19 @@ const HeaderPage = ({
     setSearchQuery(event.target.value);
   };
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery("");
-      setIsMobileMenuOpen(false);
+const handleSearch = () => {
+  if (searchQuery.trim()) {
+    navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
+    setSearchQuery("");
+    setIsMobileMenuOpen(false);
+  } else {
+    navigate("/shop");
+  }
+};
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
     }
   };
 
@@ -182,6 +193,11 @@ const HeaderPage = ({
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+    setDropdowns((prev) => ({ ...prev, categories: false }));
   };
 
   return (
@@ -241,6 +257,19 @@ const HeaderPage = ({
             <img className="h-10" src={logo} alt="Tech Haven Logo" />
           </Link>
           <div className="flex items-center gap-4 md:hidden">
+            <Link to="/wishlist" className="relative">
+              {wishlist.length > 0 && (
+                <div className="bg-red-500 rounded-full w-5 h-5 absolute -top-2 -right-2 flex items-center justify-center text-xs text-white font-medium">
+                  {getWishlistCount()}
+                </div>
+              )}
+              <FontAwesomeIcon
+                icon={faHeart}
+                className={`text-xl ${
+                  isScrolled ? "text-gray-800" : "text-white"
+                }`}
+              />
+            </Link>
             <Link to="/cart" className="relative">
               {cart.length > 0 && (
                 <div className="bg-red-500 rounded-full w-5 h-5 absolute -top-2 -right-2 flex items-center justify-center text-xs text-white font-medium">
@@ -321,7 +350,7 @@ const HeaderPage = ({
             className="w-full text-gray-800 outline-none px-4 py-2 rounded-r-none"
             value={searchQuery}
             onChange={handleSearchInputChange}
-            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+            onKeyPress={handleKeyPress}
             aria-label="Search products"
           />
           <button
@@ -361,12 +390,14 @@ const HeaderPage = ({
                 <Link
                   to="/login"
                   className="block text-gray-700 hover:text-blue-600 mb-2"
+                  onClick={() => toggleDropdown("account")}
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
                   className="block text-gray-700 hover:text-blue-600 mb-2"
+                  onClick={() => toggleDropdown("account")}
                 >
                   Register
                 </Link>
@@ -374,12 +405,14 @@ const HeaderPage = ({
                 <Link
                   to="/account"
                   className="block text-gray-700 hover:text-blue-600 mb-2"
+                  onClick={() => toggleDropdown("account")}
                 >
                   My Account
                 </Link>
                 <Link
                   to="/orders"
                   className="block text-gray-700 hover:text-blue-600"
+                  onClick={() => toggleDropdown("account")}
                 >
                   Order History
                 </Link>
@@ -475,6 +508,31 @@ const HeaderPage = ({
                             <p className="text-sm text-gray-600">
                               ${item.price.toFixed(2)} x {item.quantity}
                             </p>
+                            <div className="flex items-center mt-1">
+                              <button
+                                onClick={() =>
+                                  updateCartItemQuantity(
+                                    item.id,
+                                    Math.max(1, item.quantity - 1)
+                                  )
+                                }
+                                className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded"
+                              >
+                                -
+                              </button>
+                              <span className="mx-2">{item.quantity}</span>
+                              <button
+                                onClick={() =>
+                                  updateCartItemQuantity(
+                                    item.id,
+                                    item.quantity + 1
+                                  )
+                                }
+                                className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded"
+                              >
+                                +
+                              </button>
+                            </div>
                           </div>
                           <button
                             onClick={() => removeFromCart(item.id)}
@@ -661,7 +719,7 @@ const HeaderPage = ({
                 className="w-full text-gray-800 outline-none px-4 py-2 rounded"
                 value={searchQuery}
                 onChange={handleSearchInputChange}
-                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                onKeyPress={handleKeyPress}
               />
               <button
                 onClick={handleSearch}
