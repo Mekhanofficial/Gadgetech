@@ -1,44 +1,66 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import HomePage from "./pages/Home";
 import "./index.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-// import AboutPage from "./pages/About";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ProductDetail from "./components/ProductDetail";
+import App from "./App";
+import HomePage from "./pages/Home";
 import GadgetShop from "./pages/Shop";
-// import BlogPage from "./pages/Blog";
-// import ContactPage from "./pages/Contact";
+import CartPage from "./components/CartPage";
+import WishlistPage from "./components/WishlistPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-const proRouter = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
-  },
-  // {
-  //   path: "/About",
-  //   element: <AboutPage />,
-  // },
-  // {
-  //   path: "/Blog",
-  //   element: <BlogPage />,
-  // },
-  // {
-  //   path: "/Contact",
-  //   element: <ContactPage />,
-  // },
-  {
-    path: "/Shop",
-    element: <GadgetShop />,
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+      {
+        path: "shop",
+        element: <GadgetShop />,
+      },
+      {
+        path: "shop/:category",
+        element: <GadgetShop />,
+      },
+      {
+        path: "products/:id",
+        element: <ProductDetail />,
+      },
+      {
+        path: "cart",
+        element: <CartPage />,
+      },
+      {
+        path: "wishlist",
+        element: <WishlistPage />,
+      },
+      // Uncomment these when you create these pages
+      // {
+      //   path: "about",
+      //   element: <AboutPage />,
+      // },
+      // {
+      //   path: "blog",
+      //   element: <BlogPage />,
+      // },
+      // {
+      //   path: "contact",
+      //   element: <ContactPage />,
+      // },
+    ],
   },
 ]);
 
 root.render(
   <React.StrictMode>
-    {/* <CartProvider> */}
-    <RouterProvider router={proRouter} />
-    {/* </CartProvider> */}
+    <RouterProvider router={router} />
   </React.StrictMode>
 );

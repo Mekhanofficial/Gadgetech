@@ -58,7 +58,10 @@ import {
   faLongArrowRight,
   faStar,
   faTruck,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import { trendingNow, bestSellers, newReleases } from "../../components/Products";
 
 const slideProducts = [
   {
@@ -301,7 +304,7 @@ const HomeHeroSection = () => {
       <section className="overflow-x-hidden bg-zinc-950 text-white">
         <HeaderPage />
 
-        <div className="w-full mx-auto ">
+        <div className="w-full mx-auto  mt-20">
           <Slider {...settingsTwo}>
             {slideProducts.map((product, index) => (
               <div
@@ -372,7 +375,7 @@ const HomeHeroSection = () => {
             >
               <div className="bg-yellow-50 p-3 rounded-full">
                 <FontAwesomeIcon
-                  className="text-xl md:text-2xl text-yellow-500"
+                  className="text-xl md:text-2xl text-blue-600"
                   icon={item.icon}
                 />
               </div>
@@ -386,6 +389,190 @@ const HomeHeroSection = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="mt-20">
+          {/* Hero Section */}
+          <div className="bg-blue-900 text-white py-16 px-4">
+            <div className="container mx-auto flex flex-col md:flex-row items-center">
+              <div className="md:w-1/2 mb-8 md:mb-0">
+                <h1 className="text-4xl font-bold mb-4">Tech Haven</h1>
+                <p className="text-xl mb-6">
+                  The latest gadgets at the best prices
+                </p>
+                <Link
+                  to="/shop"
+                  className="bg-white text-blue-900 px-6 py-3 rounded-md font-medium inline-flex items-center"
+                >
+                  Shop Now{" "}
+                  <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
+                </Link>
+              </div>
+              <div className="md:w-1/2 flex justify-center">
+                <img
+                  src="/images/hero-image.png"
+                  alt="Tech gadgets"
+                  className="max-w-full h-auto"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Featured Categories */}
+          <div className="container mx-auto py-12 px-4">
+            <h2 className="text-2xl font-bold text-gray-900 mb-8">
+              Shop by Category
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                {
+                  name: "Smartphones",
+                  path: "smartphones",
+                  image: "/images/category-phones.jpg",
+                },
+                {
+                  name: "Laptops",
+                  path: "laptops",
+                  image: "/images/category-laptops.jpg",
+                },
+                {
+                  name: "Headphones",
+                  path: "headphones",
+                  image: "/images/category-headphones.jpg",
+                },
+                {
+                  name: "Smartwatches",
+                  path: "smartwatches",
+                  image: "/images/category-watches.jpg",
+                },
+              ].map((category) => (
+                <Link
+                  key={category.path}
+                  to={`/shop/${category.path}`}
+                  className="relative rounded-lg overflow-hidden group"
+                >
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-40 transition-all">
+                    <h3 className="text-white text-xl font-medium">
+                      {category.name}
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Trending Now */}
+          <div className="bg-gray-50 py-12 px-4">
+            <div className="container mx-auto">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Trending Now
+                </h2>
+                <Link
+                  to="/shop?filter=trending"
+                  className="text-blue-600 hover:text-blue-800 flex items-center"
+                >
+                  View all{" "}
+                  <FontAwesomeIcon icon={faArrowRight} className="ml-1" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {trendingNow.slice(0, 4).map((product) => (
+                  <div
+                    key={product.id}
+                    className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200 border border-gray-100"
+                  >
+                    <Link to={`/products/${product.id}`}>
+                      <div className="h-48 bg-gray-50 flex items-center justify-center p-4">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    </Link>
+                    <div className="p-4">
+                      <Link to={`/products/${product.id}`}>
+                        <h3 className="font-medium text-gray-900 mb-2 line-clamp-2 text-sm hover:text-blue-600">
+                          {product.name}
+                        </h3>
+                      </Link>
+                      <div className="flex items-center mb-3">
+                        {product.originalPrice && (
+                          <span className="text-xs text-gray-400 line-through mr-2">
+                            ${product.originalPrice.toFixed(2)}
+                          </span>
+                        )}
+                        <p className="text-gray-900 font-semibold">
+                          ${product.price.toFixed(2)}
+                        </p>
+                      </div>
+                      <Link
+                        to={`/products/${product.id}`}
+                        className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                      >
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* New Arrivals */}
+          <div className="container mx-auto py-12 px-4">
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-2xl font-bold text-gray-900">New Arrivals</h2>
+              <Link
+                to="/shop?filter=new"
+                className="text-blue-600 hover:text-blue-800 flex items-center"
+              >
+                View all{" "}
+                <FontAwesomeIcon icon={faArrowRight} className="ml-1" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {newReleases.slice(0, 4).map((product) => (
+                <div
+                  key={product.id}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200 border border-gray-100"
+                >
+                  {product.isNew && (
+                    <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-md">
+                      NEW
+                    </div>
+                  )}
+                  <Link to={`/products/${product.id}`}>
+                    <div className="h-48 bg-gray-50 flex items-center justify-center p-4">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  </Link>
+                  <div className="p-4">
+                    <Link to={`/products/${product.id}`}>
+                      <h3 className="font-medium text-gray-900 mb-2 line-clamp-2 text-sm hover:text-blue-600">
+                        {product.name}
+                      </h3>
+                    </Link>
+                    <div className="flex items-center">
+                      <p className="text-gray-900 font-semibold">
+                        ${product.price.toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="bg-white p-4 sm:p-6 lg:p-8 mx-4 sm:mx-8 lg:mx-16 my-8 sm:my-12 lg:my-16 rounded-lg shadow-sm">
