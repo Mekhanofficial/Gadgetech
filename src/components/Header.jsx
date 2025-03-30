@@ -171,15 +171,15 @@ const HeaderPage = ({
     setSearchQuery(event.target.value);
   };
 
-const handleSearch = () => {
-  if (searchQuery.trim()) {
-    navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
-    setSearchQuery("");
-    setIsMobileMenuOpen(false);
-  } else {
-    navigate("/shop");
-  }
-};
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+      setIsMobileMenuOpen(false);
+    } else {
+      navigate("/shop");
+    }
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -198,6 +198,19 @@ const handleSearch = () => {
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
     setDropdowns((prev) => ({ ...prev, categories: false }));
+    navigate("/shop");
+  };
+
+  const handleDepartmentClick = (path) => {
+    navigate(`/shop/${path}`);
+    setDropdowns((prev) => ({ ...prev, shop: false }));
+    closeMobileMenu();
+  };
+
+  const handleSubcategoryClick = (departmentPath, subcategoryPath) => {
+    navigate(`/shop/${departmentPath}/${subcategoryPath}`);
+    setDropdowns((prev) => ({ ...prev, shop: false }));
+    closeMobileMenu();
   };
 
   return (
@@ -333,10 +346,7 @@ const handleSearch = () => {
                         ? "bg-blue-600 text-white"
                         : "text-gray-700 hover:bg-gray-100"
                     }`}
-                    onClick={() => {
-                      handleCategoryClick(category);
-                      navigate(`/shop`);
-                    }}
+                    onClick={() => handleCategoryClick(category)}
                   >
                     {category}
                   </button>
@@ -611,9 +621,9 @@ const handleSearch = () => {
             <div className="absolute bg-white shadow-2xl rounded-lg p-4 top-10 left-0 w-64 z-20 grid grid-cols-1 gap-1">
               {techDepartments.map((department, index) => (
                 <div key={index} className="group relative">
-                  <Link
-                    to={`/shop/${department.path}`}
-                    className="flex justify-between items-center p-2 hover:bg-gray-50 rounded"
+                  <button
+                    className="flex justify-between items-center p-2 hover:bg-gray-50 rounded w-full text-left"
+                    onClick={() => handleDepartmentClick(department.path)}
                   >
                     <span className="text-gray-800">{department.name}</span>
                     {department.subcategories && (
@@ -622,17 +632,19 @@ const handleSearch = () => {
                         className="text-gray-400 text-xs"
                       />
                     )}
-                  </Link>
+                  </button>
                   {department.subcategories && (
                     <div className="absolute left-full top-0 ml-1 bg-white shadow-lg rounded-lg p-3 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                       {department.subcategories.map((subcat, subIndex) => (
-                        <Link
+                        <button
                           key={subIndex}
-                          to={`/shop/${department.path}/${subcat.path}`}
-                          className="block p-2 hover:bg-gray-50 rounded text-gray-700 hover:text-blue-600"
+                          className="block p-2 hover:bg-gray-50 rounded text-gray-700 hover:text-blue-600 w-full text-left"
+                          onClick={() =>
+                            handleSubcategoryClick(department.path, subcat.path)
+                          }
                         >
                           {subcat.name}
-                        </Link>
+                        </button>
                       ))}
                     </div>
                   )}
@@ -760,24 +772,31 @@ const handleSearch = () => {
                 <div className="pl-4 mt-2 space-y-2 pb-2">
                   {techDepartments.map((department, index) => (
                     <div key={index}>
-                      <Link
-                        to={`/shop/${department.path}`}
-                        className="block py-1 hover:text-red-400"
-                        onClick={closeMobileMenu}
+                      <button
+                        className="w-full text-left hover:text-red-400 py-1"
+                        onClick={() => {
+                          handleDepartmentClick(department.path);
+                          closeMobileMenu();
+                        }}
                       >
                         {department.name}
-                      </Link>
+                      </button>
                       {department.subcategories && (
                         <div className="pl-4 space-y-1">
                           {department.subcategories.map((subcat, subIndex) => (
-                            <Link
+                            <button
                               key={subIndex}
-                              to={`/shop/${department.path}/${subcat.path}`}
-                              className="block py-1 text-sm hover:text-red-400"
-                              onClick={closeMobileMenu}
+                              className="w-full text-left hover:text-red-400 py-1 text-sm"
+                              onClick={() => {
+                                handleSubcategoryClick(
+                                  department.path,
+                                  subcat.path
+                                );
+                                closeMobileMenu();
+                              }}
                             >
                               {subcat.name}
-                            </Link>
+                            </button>
                           ))}
                         </div>
                       )}

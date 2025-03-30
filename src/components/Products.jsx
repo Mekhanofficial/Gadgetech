@@ -1,11 +1,30 @@
-import px1 from "../pictures/px10.webp";
-import px2 from "../pictures/px10.webp";
-import px3 from "../pictures/px10.webp";
-import px4 from "../pictures/px10.webp";
-import px5 from "../pictures/px10.webp";
-import px6 from "../pictures/px10.webp";
-import px7 from "../pictures/px10.webp";
-import px8 from "../pictures/px10.webp";
+import ex1 from "../pictures/ex1.jpg";
+import ex2 from "../pictures/ex2.avif";
+import ex3 from "../pictures/ex3.jpg";
+import ex4 from "../pictures/ex4.jpg";
+import ex5 from "../pictures/ex5.jpg";
+import ex6 from "../pictures/ex6.avif";
+import ex7 from "../pictures/ex7.jpg";
+import ex8 from "../pictures/ex8.jpg";
+import ex9 from "../pictures/ex9.avif";
+import ex10 from "../pictures/ex10.jpg";
+import ex11 from "../pictures/ex11.avif";
+import ex12 from "../pictures/ex12.jpg";
+import ex13 from "../pictures/ex13.avif";
+import ex14 from "../pictures/ex14.avif";
+import ex15 from "../pictures/ex15.avif";
+import ex16 from "../pictures/ex16.jpg";
+import ex17 from "../pictures/ex17.jpg";
+import ex18 from "../pictures/ex18.jpg";
+import ex19 from "../pictures/ex19.jpg";
+import ex20 from "../pictures/ex20.jpeg";
+import ex21 from "../pictures/ex21.jpeg";
+import ex22 from "../pictures/ex22.png";
+import ex23 from "../pictures/ex23.webp";
+import ex24 from "../pictures/ex24.webp";
+import ex25 from "../pictures/ex25.jpg";
+import ex26 from "../pictures/ex26.jpeg";
+import ex27 from "../pictures/ex27.jpg";
 
 export const allGadgets = [
   // Smartphones (6 items)
@@ -20,7 +39,7 @@ export const allGadgets = [
     os: "iOS",
     rating: 4.8,
     reviews: 1245,
-    image: px1,
+    image: ex9,
     features: ['6.7" Super Retina XDR', "A16 Bionic", "5G", "48MP Camera"],
     releaseDate: "2022-09-16",
   },
@@ -34,7 +53,7 @@ export const allGadgets = [
     os: "Android",
     rating: 4.7,
     reviews: 892,
-    image: px2,
+    image: ex10,
     features: [
       '6.8" Dynamic AMOLED',
       "Snapdragon 8 Gen 2",
@@ -53,7 +72,7 @@ export const allGadgets = [
     os: "Android",
     rating: 4.6,
     reviews: 567,
-    image: px3,
+    image: ex11,
     features: ['6.7" OLED', "Google Tensor G2", "50MP Camera", "30x Zoom"],
     releaseDate: "2022-10-13",
   },
@@ -67,7 +86,7 @@ export const allGadgets = [
     os: "Android",
     rating: 4.5,
     reviews: 432,
-    image: px4,
+    image: ex12,
     features: ['6.7" Fluid AMOLED', "Snapdragon 8 Gen 2", "Hasselblad Camera"],
     releaseDate: "2023-01-04",
   },
@@ -81,7 +100,7 @@ export const allGadgets = [
     os: "iOS",
     rating: 4.3,
     reviews: 321,
-    image: px5,
+    image: ex13,
     features: ['4.7" Retina HD', "A15 Bionic", "5G", "Touch ID"],
     releaseDate: "2022-03-18",
   },
@@ -95,7 +114,7 @@ export const allGadgets = [
     os: "Android",
     rating: 4.4,
     reviews: 278,
-    image: px6,
+    image: ex14,
     features: ['6.7" Foldable', "Snapdragon 8+ Gen 1", "Compact Design"],
     releaseDate: "2022-08-26",
   },
@@ -110,7 +129,7 @@ export const allGadgets = [
     type: "Ultrabook",
     rating: 4.9,
     reviews: 876,
-    image: px7,
+    image: ex14,
     features: ["M2 Max chip", "32GB RAM", "1TB SSD", "Liquid Retina XDR"],
     releaseDate: "2023-01-24",
   },
@@ -123,7 +142,7 @@ export const allGadgets = [
     type: "Ultrabook",
     rating: 4.7,
     reviews: 654,
-    image: px8,
+    image: ex15,
     features: ['15.6" 4K OLED', "Intel i7", "16GB RAM", "512GB SSD"],
     releaseDate: "2022-05-15",
   },
@@ -136,7 +155,7 @@ export const allGadgets = [
     type: "Gaming",
     rating: 4.8,
     reviews: 543,
-    image: px1,
+    image: ex16,
     features: ['14" QHD', "Ryzen 9", "RTX 3060", "16GB RAM"],
     releaseDate: "2022-02-10",
   },
@@ -149,7 +168,7 @@ export const allGadgets = [
     type: "Business",
     rating: 4.6,
     reviews: 432,
-    image: px2,
+    image: ex1,
     features: ['14" WUXGA', "Intel i7", "16GB RAM", "Military Grade"],
     releaseDate: "2022-04-22",
   },
@@ -162,7 +181,7 @@ export const allGadgets = [
     type: "Ultrabook",
     rating: 4.5,
     reviews: 321,
-    image: px3,
+    image: ex2,
     features: ['13.5" Touch', "Intel i5", "8GB RAM", "Windows 11"],
     releaseDate: "2022-10-25",
   },
@@ -175,7 +194,7 @@ export const allGadgets = [
     type: "Ultrabook",
     rating: 4.8,
     reviews: 765,
-    image: px4,
+    image: ex3,
     features: ['13.6" Liquid Retina', "M2 chip", "8GB RAM", "256GB SSD"],
     releaseDate: "2022-07-15",
   },
@@ -191,7 +210,7 @@ export const allGadgets = [
     os: "iPadOS",
     rating: 4.7,
     reviews: 543,
-    image: px5,
+    image: ex4,
     features: ["M2 chip", "Liquid Retina XDR", "Face ID", "Thunderbolt"],
     releaseDate: "2022-10-26",
   },
@@ -205,7 +224,7 @@ export const allGadgets = [
     os: "Android",
     rating: 4.6,
     reviews: 432,
-    image: px6,
+    image: ex5,
     features: ['14.6" AMOLED', "S Pen", "Snapdragon 8 Gen 1"],
     releaseDate: "2022-02-25",
   },
@@ -219,7 +238,7 @@ export const allGadgets = [
     os: "Windows",
     rating: 4.5,
     reviews: 321,
-    image: px7,
+    image: ex6,
     features: ['13" PixelSense', "Intel i5", "8GB RAM", "Surface Pen"],
     releaseDate: "2022-10-25",
   },
@@ -234,7 +253,7 @@ export const allGadgets = [
     type: "Fitness",
     rating: 4.8,
     reviews: 654,
-    image: px8,
+    image: ex7,
     features: [
       "49mm Titanium",
       "GPS + Cellular",
@@ -252,7 +271,7 @@ export const allGadgets = [
     type: "Fitness",
     rating: 4.6,
     reviews: 432,
-    image: px1,
+    image: ex8,
     features: ["45mm Titanium", "Wear OS", "BioActive Sensor", "GPS"],
     releaseDate: "2022-08-26",
   },
@@ -265,7 +284,7 @@ export const allGadgets = [
     type: "Fitness",
     rating: 4.7,
     reviews: 321,
-    image: px2,
+    image: ex17,
     features: ["Solar Charging", "Multi-band GPS", "32GB Storage", "Topo Maps"],
     releaseDate: "2022-01-18",
   },
@@ -280,7 +299,7 @@ export const allGadgets = [
     type: "Wireless",
     rating: 4.8,
     reviews: 876,
-    image: px3,
+    image: ex18,
     features: ["Active Noise Cancellation", "Adaptive Transparency", "H2 Chip"],
     releaseDate: "2022-09-23",
   },
@@ -293,7 +312,7 @@ export const allGadgets = [
     type: "Wireless",
     rating: 4.9,
     reviews: 765,
-    image: px4,
+    image: ex19,
     features: ["Industry-leading ANC", "30hr Battery", "Multi-point Pairing"],
     releaseDate: "2022-05-19",
   },
@@ -306,7 +325,7 @@ export const allGadgets = [
     type: "Wireless",
     rating: 4.7,
     reviews: 543,
-    image: px5,
+    image: ex20,
     features: ["Noise Cancelling", "24hr Battery", "TriPort Acoustic"],
     releaseDate: "2021-09-23",
   },
@@ -321,7 +340,7 @@ export const allGadgets = [
     type: "Mirrorless",
     rating: 4.8,
     reviews: 321,
-    image: px6,
+    image: ex21,
     features: ["45MP Full Frame", "8K Video", "IBIS", "Dual Pixel AF"],
     releaseDate: "2020-07-30",
   },
@@ -334,7 +353,7 @@ export const allGadgets = [
     type: "Mirrorless",
     rating: 4.9,
     reviews: 432,
-    image: px7,
+    // image: ex22,
     features: ["33MP Full Frame", "4K60p", "Real-time Tracking"],
     releaseDate: "2021-12-23",
   },
@@ -347,7 +366,7 @@ export const allGadgets = [
     type: "Action",
     rating: 4.6,
     reviews: 543,
-    image: px8,
+    image: ex22,
     features: ["5.3K60", "HyperSmooth 5.0", "10-bit Color", "Waterproof"],
     releaseDate: "2022-09-14",
   },
@@ -362,7 +381,7 @@ export const allGadgets = [
     type: "Console",
     rating: 4.8,
     reviews: 987,
-    image: px1,
+    image: ex23,
     features: ["4K/120fps", "825GB SSD", "3D Audio", "DualSense"],
     releaseDate: "2020-11-12",
   },
@@ -375,7 +394,7 @@ export const allGadgets = [
     type: "Console",
     rating: 4.7,
     reviews: 876,
-    image: px2,
+    image: ex24,
     features: ["4K/120fps", "1TB SSD", "Quick Resume", "Backward Compatible"],
     releaseDate: "2020-11-10",
   },
@@ -388,7 +407,7 @@ export const allGadgets = [
     type: "Console",
     rating: 4.6,
     reviews: 765,
-    image: px3,
+    // image: ex26,
     features: ['7" OLED', "64GB Storage", "Tabletop Mode", "Joy-Con"],
     releaseDate: "2021-10-08",
   },
@@ -403,7 +422,7 @@ export const allGadgets = [
     type: "Charger",
     rating: 4.3,
     reviews: 432,
-    image: px4,
+    image: ex25,
     features: ["15W Fast Charging", "LED Indicator", "Compatible with Cases"],
     releaseDate: "2020-10-23",
   },
@@ -416,8 +435,8 @@ export const allGadgets = [
     type: "Earbuds",
     rating: 4.5,
     reviews: 321,
-    image: px5,
-    features: ["24-bit Hi-Fi", "ANC", "IPX7 Waterproof"],
+    image: ex26,
+    features: ["24-bit Hi-Fi", "ANC", "Iex7 Waterproof"],
     releaseDate: "2022-08-26",
   },
   {
@@ -429,7 +448,7 @@ export const allGadgets = [
     type: "Mouse",
     rating: 4.7,
     reviews: 543,
-    image: px6,
+    image: ex27,
     features: ["8K DPI", "Silent Clicks", "Multi-device", "USB-C"],
     releaseDate: "2022-06-07",
   },
