@@ -6,6 +6,7 @@ import ProductDetail from "./components/ProductDetail";
 import HomePage from "./pages/Home";
 import CartPage from "./components/CartPage";
 import WishlistPage from "./components/WishlistPage";
+import FooterPage from "./components/Footer";
 
 function App() {
   const [cart, setCart] = useState(() => {
@@ -136,6 +137,7 @@ function App() {
           }
         />
       </Routes>
+      <FooterPage />
     </>
   );
 }

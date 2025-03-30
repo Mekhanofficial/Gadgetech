@@ -22,6 +22,7 @@ import {
   deals,
 } from "../components/Products";
 
+
 const GadgetShop = ({
   cart,
   wishlist,
